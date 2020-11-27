@@ -4,14 +4,13 @@
 
 
 
-
 class BinarySearchTree{
     constructor(){
         this._root = null;
     }
 
     // Insertion
-    insert(value){
+    insert(value){ 
         let thisNode = {left: null, right: null, value: value};
         if(!this._root){
             this._root = thisNode;
@@ -140,7 +139,66 @@ class BinarySearchTree{
     }
 
 
-    
+    //Deletion 
+    remove(value){
+        
+        return deleteRecursively(this._root, value);
+
+        function deleteRecursively(root, value){
+            if(!root){
+                return null;
+            }else if(value < root.value){
+                root.left = deleteRecursively(root.left, value);
+            }else if(value > root.value){
+                root.right = deleteRecursively(root.right, value);
+            }else{
+                if(!root.left && !root.right){
+                    return null;
+                }else if(!root.left){
+                    root = root.right;
+                    return root; 
+                }else if(!root.right){
+                    root = root.left;
+                    return root;
+                }else{
+                    let temp = findMin(root.right);
+                    root.value = temp.value;
+                    root.right = deleteRecursively(root.right, temp.value);
+                    return root;
+                }
+            }
+            return root;
+        }
+
+
+        function findMin(root){
+            while(root.left){
+                root = root.left;
+            };
+            return root;
+        }
+    }
+
+
+    //Search
+    findNode(value){
+        let currentRoot = this._root,
+            found = false;
+        
+        while(currentRoot){
+            if(currentRoot.value > value){
+                currentRoot = currentRoot.left;
+            }else if(currentRoot.value < value){
+                currentRoot = currentRoot.right;
+            }else{
+                found = true;
+                break;
+            }
+        }
+
+        return found;
+    }
+
 
 };
 
@@ -152,12 +210,16 @@ BST.insert(25);
 BST.insert(7);
 BST.insert(9);
 BST.insert(5);
+
+
 console.log(BST._root);
-console.log(`__________*PreOrederTraversal*___________`);
-BST.traversePreOrder();
-console.log(`__________*InOrederTraversal*___________`);
-BST.traverseInOrder();
-console.log(`__________*PostOrederTraversal*___________`);
-BST.traversePostOrder();
-console.log(`__________*LevelOrederTraversal*___________`);
-BST.traverseLevelOrder();
+console.log(BST.findNode(12))
+
+// console.log(`__________*PreOrederTraversal*___________`);
+// BST.traversePreOrder();
+// console.log(`__________*InOrederTraversal*___________`);
+// BST.traverseInOrder();
+// console.log(`__________*PostOrederTraversal*___________`);
+// BST.traversePostOrder();
+// console.log(`__________*LevelOrederTraversal*___________`);
+// BST.traverseLevelOrder();
